@@ -54,6 +54,8 @@ Quick checklist for reviewers of the k3s package:
 
 * Is the version of the Go compiler pinned according to the go.mod file for the release?
   * The update script will not pin nor change the Go version.
+* Does `chart-versions.nix` contain one entry per chart referenced by a HelmChart in k3s's `manifests/` (e.g. `traefik`, `traefik-crd`, `gateway-api-crd`)?
+  * The update script discovers these automatically. A missing chart is not a build failure; k3s still deploys its manifest, and the helm-install job 404s at runtime.
 * Do the K3s passthru.tests work for all architectures supported? (linux-x86_64, aarch64-linux)
   * For GitHub CI, [OfBorg](https://github.com/NixOS/ofborg) can be used to test all platforms.
   * For Local testing, the following can be run in nixpkgs root on the upgrade branch: `nix build .#k3s_1_29.passthru.tests.{etcd,single-node,multi-node}` (Replace "29" to the version tested)
